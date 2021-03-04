@@ -1,3 +1,4 @@
+import 'package:Lesson2Creative/screens/task_manager.dart';
 import 'package:flutter/material.dart';
 
 class StartScreen extends StatelessWidget{
@@ -13,7 +14,14 @@ class StartScreen extends StatelessWidget{
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Start Screen", style: Theme.of(context).textTheme.headline5,),
+              RaisedButton(
+                child: Text(
+                  "Task Manager",
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+                onPressed: () => 
+                  Navigator.pushNamed(context, TaskManagerScreen.routeName)
+              ),
             ],
           ),
         ),

@@ -1,4 +1,6 @@
+import 'package:Lesson2Creative/screens/addtask_screen.dart';
 import 'package:Lesson2Creative/screens/start_screen.dart';
+import 'package:Lesson2Creative/screens/task_manager.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,10 +17,11 @@ class Creative2App extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: StartScreen.routeName,
+      initialRoute: TaskManagerScreen.routeName,
       routes: {
         StartScreen.routeName : (context) => StartScreen(),
-
+        TaskManagerScreen.routeName : (context) => TaskManagerScreen(),
+        AddTaskScreen.routeName : (context) => AddTaskScreen(),
       },
     );
   }
