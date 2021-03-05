@@ -58,7 +58,7 @@ class _Controller {
 //member functions---------------
   Widget getTasks(BuildContext context, int index){
     return Container(
-      color: Colors.blue[200],
+      color: tasksDB[index].subject.color,
       padding: EdgeInsets.all(10.0),
       margin: EdgeInsets.all(10.0),
       child: ListTile(
@@ -68,6 +68,9 @@ class _Controller {
           "${tasksDB[index].dueDate.day}/" +
           "${tasksDB[index].dueDate.year}"
         ),
+        onTap: (){
+          _onTap(context, index);
+        },
       ),
     );
   }
@@ -78,6 +81,80 @@ class _Controller {
       state.render((){
         print("refresh");
       });
+    });
+  }
+
+  void _onTap(BuildContext context, int index){
+    showDetails(context, tasksDB[index]);
+  }
+
+  void showDetails(BuildContext context, Task task){
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => AlertDialog(
+        title: Text(task.name),
+        actions: [
+          FlatButton(
+            color: Colors.blue,
+            child: Text("Complete"),
+            onPressed: () => deleteTask(context, task),
+          ),
+          SizedBox(width: 10),
+          IconButton(
+            icon: Icon(Icons.delete_forever_outlined),
+            onPressed: () => deleteTask(context, task),
+            color: Colors.red,
+          ),
+          IconButton(
+            icon: Icon(Icons.edit_outlined),
+            onPressed: () => print("edit"),
+            color: Colors.blue,
+          ),
+        ],
+        content: Card(
+          elevation: 0,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(task.description),
+                    )
+                  ]
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(task.subject.name),
+                    )
+                  ]
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "Due: ${task.dueDate.month}/" +
+                        "${task.dueDate.day}/" +
+                        "${task.dueDate.year}"
+                      ),
+                    ),
+                  ]
+                ),
+              ],
+            ),
+          ),
+        ),
+      )
+    );
+  }
+
+  void deleteTask(BuildContext context, Task task){
+    state.render((){
+      
+      tasksDB.remove(task);
+      Navigator.pop(context);
     });
   }
 }

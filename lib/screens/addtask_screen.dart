@@ -1,3 +1,4 @@
+import 'package:Lesson2Creative/model/subject.dart';
 import 'package:Lesson2Creative/model/task.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,7 @@ class AddTaskState extends State<AddTaskScreen> {
       name: "New Task", 
       description: "NewTask",
       dueDate: DateTime.utc(1970, 1, 1),
+      subject: subjects[0],
     );
   }
 
@@ -36,6 +38,7 @@ class AddTaskState extends State<AddTaskScreen> {
     return Scaffold(
       appBar: AppBar(title: Text("Add Task")),
       body: Form(
+        key: formKey,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -54,7 +57,7 @@ class AddTaskState extends State<AddTaskScreen> {
                       enabled: true,
                       initialValue: "New Task",
                       validator: null,
-                      onSaved: null,
+                      onSaved: con.onSaveName,
                     ),
                   ),
                 ],
@@ -74,7 +77,7 @@ class AddTaskState extends State<AddTaskScreen> {
                       enabled: true,
                       initialValue: "New Task",
                       validator: null,
-                      onSaved: null,
+                      onSaved: con.onSaveDescription,
                     ),
                   ),
                 ],
@@ -103,6 +106,18 @@ class AddTaskState extends State<AddTaskScreen> {
                         ),
                       ],
                     )
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(child: Text("Subject"),),
+                  Expanded(
+                    child: DropdownButtonFormField(
+                      value: newTask.subject,
+                      items: con.getSubjectList(),
+                      onChanged: con.onChangedSubject,
+                    ),
                   ),
                 ],
               ),
@@ -142,8 +157,31 @@ class _Controller {
       });  
   }
 
+  void onSaveName(String inName){
+    state.newTask.name = inName;
+  }
+
+  void onSaveDescription(String inDescription){
+    state.newTask.description = inDescription;
+  }
+
   void addTask(){
+    state.formKey.currentState.save();
     tasksDB.add(state.newTask);
     Navigator.pop(state.context);
   }
+
+  List getSubjectList(){
+    List<DropdownMenuItem> classifications = subjects
+      .map((s) => DropdownMenuItem<Subject>(
+        child: Text(s.name), 
+        value: s))
+      .toList();
+    return classifications;
+  }
+
+  void onChangedSubject(Subject subject){
+    state.render(() => state.newTask.subject = subject);
+  }
+ 
 }

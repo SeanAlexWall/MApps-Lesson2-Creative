@@ -1,13 +1,17 @@
+import 'package:Lesson2Creative/model/subject.dart';
+
 class Task {
 //member attributes---------  
   String name;
   String description;
   DateTime dueDate;
+  Subject subject;
 //constructors--------------
   Task({
     this.name,
     this.description,
     this.dueDate,
+    this.subject,
   });
 //member functions----------
 
@@ -16,18 +20,33 @@ class Task {
 //fake db of tasks for testing purposes
 List<Task> tasksDB = [
   Task(
-    name: "Mobile Apps Creative 2",
-    description: "Creative 2 for Mobile Apps",
+    name: "Pgs 152-153 problems 3-23 odd",
+    description: "Polynomial Long Division",
     dueDate: DateTime.utc(2021, 3, 4),
+    subject: subjects[subjects.indexWhere((e) => e.name == "Math")],
   ),
   Task(
     name: "Government Discussion 4",
     description: "Post reaction to article and reply to 2 threads",
     dueDate: DateTime.utc(2021, 3, 2),
+    subject: subjects[subjects.indexWhere((e) => e.name == "History")],
   ),
   Task(
-    name: "Programming Languages p02",
-    description: "Subset Pascal Parser",
+    name: "Persuasive Essay 2",
+    description: "UGGGH ESSAY :(",
     dueDate: DateTime.utc(2021, 3, 8),
+    subject: subjects[subjects.indexWhere((e) => e.name == "English")],
+  ),
+  Task(
+    name: "Lab Report 3-7",
+    description: "Kinetic Energy Lab Report",
+    dueDate: DateTime.utc(2021, 3, 7),
+    subject: subjects[subjects.indexWhere((e) => e.name == "Science")],
+  ),
+  Task(
+    name: "Tidy Room",
+    description: "",
+    dueDate: DateTime.utc(2021, 3, 5),
+    subject: subjects[subjects.indexWhere((e) => e.name == "Chores")],
   ),
 ];
