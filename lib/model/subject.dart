@@ -9,9 +9,19 @@ class Subject {
     this.name,
     this.color,
   });
+  Subject.fromJson(Map<String, dynamic> json){
+    name = json['name'];
+    color = Color(json['color']);
+  }
 //member functions----------
+  Map<String, dynamic> toJson() => {
+    'name' : name,
+    'color' : color.value,
+  };
+
 }
 
+Subject defaultSubject = Subject(name: "Other", color: Colors.white);
 
 //default subjects
 List<Subject> subjects = [

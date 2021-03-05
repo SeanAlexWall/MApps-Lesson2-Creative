@@ -13,8 +13,19 @@ class Task {
     this.dueDate,
     this.subject,
   });
+  Task.fromJson(Map<String, dynamic> json){
+    name = json['name'];
+    description = json['description'];
+    dueDate = DateTime.parse(json['dueDate']);
+    subject = Subject.fromJson(json['subject']);
+  }
 //member functions----------
-
+  Map<String, dynamic> toJson() => {
+    'name' : name,
+    'description' : description,
+    'dueDate' : dueDate.toString(),
+    'subject' : subject.toJson(),
+  };
 }
 
 //fake db of tasks for testing purposes

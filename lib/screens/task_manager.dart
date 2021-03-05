@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:Lesson2Creative/model/task.dart';
+import 'package:Lesson2Creative/model/tasklist.dart';
 import 'package:Lesson2Creative/screens/addtask_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -13,11 +16,13 @@ class TaskManagerScreen extends StatefulWidget{
 
 class TaskManagerState extends State<TaskManagerScreen> {
   _Controller con;
-
+  TaskList taskList;
+  
   @override
   initState(){
     super.initState();
     con = _Controller(this);
+    taskList = TaskList();
   }
 
   void render(fn){
@@ -27,18 +32,23 @@ class TaskManagerState extends State<TaskManagerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    taskList.getTasks();
+
     return Scaffold(
       appBar: AppBar(title: Text("Task Manager")),
       floatingActionButton: FloatingActionButton( 
         onPressed: () => {
-          Navigator.pushNamed(context, AddTaskScreen.routeName)
-          .whenComplete(con.refresh)
+          Navigator.pushNamed(context, AddTaskScreen.routeName, arguments: taskList)
+          .whenComplete((){
+            taskList.saveTasks();
+            con.refresh();
+          })
         },
         child: Icon(Icons.add),
       ),
       body: RefreshIndicator(
         child: ListView.builder(
-          itemCount: tasksDB.length,
+          itemCount: taskList.tasks.length,
           itemBuilder: con.getTasks,
         ),
         onRefresh: con.refresh,
@@ -57,16 +67,17 @@ class _Controller {
 
 //member functions---------------
   Widget getTasks(BuildContext context, int index){
+    print("getTasks");
     return Container(
-      color: tasksDB[index].subject.color,
+      color: state.taskList.tasks[index].subject.color,
       padding: EdgeInsets.all(10.0),
       margin: EdgeInsets.all(10.0),
       child: ListTile(
-        title: Text(tasksDB[index].name),
+        title: Text(state.taskList.tasks[index].name),
         subtitle: Text(
-          "Due: ${tasksDB[index].dueDate.month}/" +
-          "${tasksDB[index].dueDate.day}/" +
-          "${tasksDB[index].dueDate.year}"
+          "Due: ${state.taskList.tasks[index].dueDate.month}/" +
+          "${state.taskList.tasks[index].dueDate.day}/" +
+          "${state.taskList.tasks[index].dueDate.year}"
         ),
         onTap: (){
           _onTap(context, index);
@@ -85,7 +96,7 @@ class _Controller {
   }
 
   void _onTap(BuildContext context, int index){
-    showDetails(context, tasksDB[index]);
+    showDetails(context, state.taskList.tasks[index]);
   }
 
   void showDetails(BuildContext context, Task task){
@@ -153,7 +164,8 @@ class _Controller {
   void deleteTask(BuildContext context, Task task){
     state.render((){
       
-      tasksDB.remove(task);
+      state.taskList.tasks.remove(task);
+      state.taskList.saveTasks();
       Navigator.pop(context);
     });
   }

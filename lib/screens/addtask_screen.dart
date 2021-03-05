@@ -1,5 +1,6 @@
 import 'package:Lesson2Creative/model/subject.dart';
 import 'package:Lesson2Creative/model/task.dart';
+import 'package:Lesson2Creative/model/tasklist.dart';
 import 'package:flutter/material.dart';
 
 class AddTaskScreen extends StatefulWidget{
@@ -14,6 +15,7 @@ class AddTaskScreen extends StatefulWidget{
 class AddTaskState extends State<AddTaskScreen> {
   _Controller con;
   Task newTask;
+  TaskList taskList;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -35,6 +37,7 @@ class AddTaskState extends State<AddTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
+    taskList = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(title: Text("Add Task")),
       body: Form(
@@ -167,7 +170,7 @@ class _Controller {
 
   void addTask(){
     state.formKey.currentState.save();
-    tasksDB.add(state.newTask);
+    state.taskList.tasks.add(state.newTask);
     Navigator.pop(state.context);
   }
 
